@@ -4,21 +4,23 @@ public class Game {
 	
 	private Board board;
 	private Player[] playersList;
-	private static final int CONN_N = 4;
+	private static final int CONNECTED = 4;
 
 	public Game(int rows, int columns, Player player1, Player player2){
+		
 		this.board = new Board(rows, columns);
+		
 		player1.setToken(Token.X);
 		player2.setToken(Token.O);
+		
 		playersList = new Player[]{ player1, player2 };
+		
 	}
 	
 	public void run(){
 
-		board.init();
-		
 		int currPlayer = -1;
-		//Player currentPlayer = new Player();
+		
 		Player player;
 		do {
 			
@@ -30,7 +32,8 @@ public class Game {
 
 			player = playersList[currPlayer];
 			
-			if (!makePlayerMove(player)){break;}
+			//if (!makePlayerMove(player)){break;}
+			makePlayerMove(player);
 			
 			player.won = playerWins(player);
 	
@@ -47,7 +50,6 @@ public class Game {
 	public boolean makePlayerMove(Player player){
 		
 		int column = player.getMove(board);
-		if (column == 99){return false;}
 		board.placeMove(column, player);
 		
 		return true;
@@ -61,55 +63,52 @@ public class Game {
 		Token token = player.getToken();
 		boolean connFound = false;
 		
-		for (int R = 0; R <= lastRow; R++){
-			for (int C = 0; C <= lastCol; C++){
-				connFound = findConn(token, R, C, CONN_N);
+		for (int row = 0; row <= lastRow; row++){
+			for (int col = 0; col <= lastCol; col++){
+				connFound = findConn(token, row, col, CONNECTED);
 				if (connFound){return connFound;}
 			}
 		}
 		return false;
 	}
 	
-	public boolean findConn(Token token, int row, int col, int connCount){
+	public boolean findConn(Token token, int startRow, int startCol, int connCount){
 		int conn = 0;
-		//Token token = board.getToken(x, y);
 		
 		int lastCol = board.getColumns() - 1;
 		int lastRow = board.getRows() - 1;
-		//int lastCol0 = lastCol - (connCount - 1);
-		//int lastRow0 = lastRow - (connCount - 1);
 		
-		int colTo = col + connCount - 1;
-		if (colTo > lastCol) colTo = col;
-		int rowTo = row + connCount - 1;
-		if (rowTo > lastRow){rowTo = row;}
+		int colTo = startCol + connCount - 1;
+		if (colTo > lastCol) colTo = startCol;
+		int rowTo = startRow + connCount - 1;
+		if (rowTo > lastRow){rowTo = startRow;}
 		
 		// horizontal
-		for (int C = col; C <= colTo; C++){
-			conn = (board.getToken(row, C) == token) ? ++conn : 0;
+		for (int col = startCol; col <= colTo; col++){
+			conn = (board.getToken(startRow, col) == token) ? ++conn : 0;
 			if (conn == connCount){return true;}
 		}
 		
 		// vertical
 		conn = 0;
-		for (int R = row; R <= rowTo; R++){
-			conn = (board.getToken(R, col) == token) ? ++conn : 0;
+		for (int row = startRow; row <= rowTo; row++){
+			conn = (board.getToken(row, startCol) == token) ? ++conn : 0;
 			if (conn == connCount){return true;}
 		}
 		
 		// up-right
 		conn = 0;
-		for (int C = col, R = row; C <= colTo && R <= rowTo; C++, R++){
-			conn = (board.getToken(R, C) == token) ? ++conn : 0;
+		for (int col = startCol, row = startRow; col <= colTo && row <= rowTo; col++, row++){
+			conn = (board.getToken(row, col) == token) ? ++conn : 0;
 			if (conn == connCount){return true;}
 		}
 		
 		// up-left
-		colTo = col - connCount - 1;
-		if (colTo < 0){colTo = col;}
+		colTo = startCol - connCount - 1;
+		if (colTo < 0) colTo = startCol;
 		conn = 0;
-		for (int C = col, R = row; C >= 0 && R <= rowTo; C--, R++){
-			conn = (board.getToken(R, C) == token) ? ++conn : 0;
+		for (int col = startCol, row = startRow; col >= 0 && row <= rowTo; col--, row++){
+			conn = (board.getToken(row, col) == token) ? ++conn : 0;
 			if (conn == connCount){return true;}
 		}
 		

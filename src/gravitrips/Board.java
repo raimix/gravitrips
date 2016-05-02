@@ -2,37 +2,24 @@ package gravitrips;
 
 public class Board {
 	
-	private int rows = 6;
-	private int columns = 7;
-	private Token[][] board = new Token[rows][columns];
+	private int rows;
+	private int columns;
+	private Token[][] board;
 	
 	public Board(int rows, int columns){
+		
 		this.rows = rows;
 		this.columns = columns;
+		
 		board = new Token[rows][columns];
+		initBoard(Token.EMPTY);
 	}
 	
-	public void init(){
-		for (int x = 0; x < this.getRows(); x++) {
-			for (int y = 0; y < this.getColumns(); y++) {
-				board[x][y] = Token.EMPTY;
+	public void initBoard(Token token){
+		for (int x = 0; x < getRows(); x++) {
+			for (int y = 0; y < getColumns(); y++) {
+				board[x][y] = token;
 			}
-		}
-	}
-	
-	public void show_4del(){
-		for (int y = 0; y < this.getColumns(); y++) { 
-			System.out.print(y + " ");
-		}
-		System.out.println();
-		
-		System.out.println(new String(new char[(this.getColumns()) * 2 - 1]).replace("\0", "-"));
-		
-		for (int x = 0; x < this.getRows(); x++) {
-			for (int y = 0; y < this.getColumns(); y++) {
-				System.out.print(board[x][y].getChar() + " "); 
-			}
-			System.out.println();
 		}
 	}
 	
@@ -41,21 +28,21 @@ public class Board {
         System.out.println();
         
         System.out.print("     ");
-        for(int i=1;i<=columns;++i){
+        for(int i=1; i<=getColumns(); ++i){
         	System.out.printf("%-3d",i);
         }
         
         System.out.println();
         System.out.printf("     ");
-        for(int i=1; i<(3*columns); ++i){
+        for(int i=1; i<(3*getColumns()); ++i){
         	System.out.print("-");
         }
         
         System.out.println();
-        for(int i=rows-1; i>=0; --i){
+        for(int i=getRows()-1; i>=0; --i){
             System.out.printf("%-2d | ", (i+1));
-            for(int j=0;j<=columns-1;++j){
-                System.out.printf("%-3s",board[i][j].getChar());
+            for(int j=0; j<=getColumns()-1; ++j){
+                System.out.printf("%-3s", board[i][j].getChar());
             }
             System.out.println();
         }
@@ -64,15 +51,11 @@ public class Board {
     }
 	
 	public int getRows(){
-		return this.rows;
+		return rows;
 	}
 	
 	public int getColumns(){
-		return this.columns;
-	}
-	
-	public boolean makePlayerMove(Player player){
-		return false;
+		return columns;
 	}
 	
 	public boolean isItValidMove(int column){
@@ -85,21 +68,24 @@ public class Board {
 	}
 	
 	public int findRow(int column){
+		
 		int row = 0;
-		for (int i=0; i<this.rows; ++i) {
+		
+		for (int i = 0; i < getRows(); ++i) {
 			if (board[i][column] == Token.EMPTY) {
 				row = i;
 				break;
 			}
 		}
+		
 		return row;
 	}
 	
 	public int countEmptyCells(){
 		int emptyCells = 0;
 		
-		for (int i = 0; i < this.getRows(); i++) {
-			for (int j = 0; j < this.getColumns(); j++) {
+		for (int i = 0; i < getRows(); i++) {
+			for (int j = 0; j < getColumns(); j++) {
 				if (board[i][j] == Token.EMPTY){
 					emptyCells++;
 				}
@@ -108,13 +94,9 @@ public class Board {
 		return emptyCells;
 	}
 	
-	public boolean noEmptyCellsLeft4del(){
-		return false;
-	}
-	
 	public boolean emptyCellsLeft(){
 		for (int j = 0; j <= getColumns()-1; j++){
-			if (board[this.getRows()-1][j] == Token.EMPTY){return true;}
+			if (board[getRows()-1][j] == Token.EMPTY){return true;}
 		}
 		return false;
 	}

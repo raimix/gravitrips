@@ -18,7 +18,6 @@ public class HumanPlayer extends Player {
 			}
 			System.out.println("your " + getName() + " move (1-" + board.getColumns() + "): ");
 			move = scan.nextInt();
-			if (move == 99){return move;}
 			
 			i++;
 			
@@ -27,10 +26,4 @@ public class HumanPlayer extends Player {
 		return --move;
 	}
 	
-	public int getValidMove2(Board board){
-		int move;
-		move = scan.nextInt()-1;
-		return move;
-	}
-
 }

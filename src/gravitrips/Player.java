@@ -3,7 +3,6 @@ package gravitrips;
 public abstract class Player {
 
 	private Token token;
-	private String name;
 	public boolean won = false;
 	
 	public void setToken(Token token){
